@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "login": "Roberto84@gmail.com",
+    "password": "12r345",
+    "age": 38,
+    "gender": "male",
+    "isDeleted": false
+  },
+  {
+    "id": 2,
+    "login": "Ana84@hotmail.com",
+    "password": "6789",
+    "age": 39,
+    "gender": "female",
+    "isDeleted": false
+  },
+  {
+    "id": 2,
+    "login": "Robi77@hotmail.com",
+    "password": "6789a",
+    "age": 39,
+    "gender": "female",
+    "isDeleted": false
+  }
+]
