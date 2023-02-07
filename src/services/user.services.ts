@@ -1,60 +1,55 @@
-import { NewUserEntry, UserEntry } from "../types";
-import usersData from "./users.json";
+import { NewUserEntry } from "../types";
+import { User } from "../models/user.model";
 
-const users: Array<UserEntry> = usersData as Array<UserEntry>;
-
-export const getUsers = (): Array<UserEntry> => users;
-
-export const findById = (id: number): UserEntry | undefined => {
-  const entry = users.find((data) => data.id === id);
-  return entry;
-};
-
-export const addUser = (newUserEntry: NewUserEntry) => {
-  const newUser = {
-    id: users.length + 1,
-    ...newUserEntry,
-    isDeleted: false,
-  };
-
-  users.push(newUser);
-  return newUser;
-};
-
-export const updateUser = (id: number, newUserEntry: NewUserEntry) => {
-  const { login, password, age, gender } = newUserEntry;
-  const entry = users.find((data) => data.id === id);
-  if (entry) {
-    entry.login = login;
-    entry.password = password;
-    entry.age = age;
-    entry.gender = gender;
-    return entry;
+export class UserService {
+  async findAll(): Promise<User[]> {
+    return await User.findAll();
   }
-  throw new Error("Id not found");
-};
 
-export const deleteUser = (id: number): UserEntry | undefined => {
-  const entry = users.find((data) => data.id === id);
-  if (entry) {
-    entry.isDeleted = true;
-    return entry;
+  async findById(id: string): Promise<User | null> {
+    return await User.findByPk(id);
   }
-  return undefined;
-};
 
-export const getAutoSuggestUsers = (
-  loginSubstring: string,
-  limit: number | undefined
-) => {
-  const users = getUsers();
+  async createUser(user: User): Promise<User> {
+    return await User.create(user);
+  }
 
-  const filteredUsers = users.filter((user) =>
-    user.login.toLowerCase().includes(loginSubstring.toLowerCase())
-  );
+  async deleteUser(id: string): Promise<string | undefined> {
+    const user = await this.findById(id);
+    if (user) {
+      await user.destroy();
+      return "User deleted";
+    }
+    return undefined;
+  }
 
-  const sortedUsers = filteredUsers.sort((a, b) =>
-    a.login > b.login ? 1 : -1
-  );
-  return sortedUsers.slice(0, limit);
-};
+  async updateUser(id: string, newUserEntry: NewUserEntry): Promise<User> {
+    const { login, password, age } = newUserEntry;
+    const user = await User.findByPk(id);
+    if (user) {
+      user.login = login;
+      user.password = password;
+      user.age = age;
+      await user.save();
+      return user;
+    }
+    throw new Error("Id not found");
+  }
+
+  async getAutoSuggestUsers(loginSubstring: string, limit: number | undefined) {
+    const users = await User.findAll();
+
+    const filteredUsers = users.filter((user) =>
+      user.login.toLowerCase().includes(loginSubstring.toLowerCase())
+    );
+
+    const sortedUsers = filteredUsers.sort((a, b) =>
+      a.login > b.login ? 1 : -1
+    );
+
+    const suggestedUsers = sortedUsers.slice(0, limit);
+
+    console.log(limit);
+    return suggestedUsers;
+  }
+}
