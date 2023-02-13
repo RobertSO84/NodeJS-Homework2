@@ -68,7 +68,7 @@ export class UserService {
       const user = await User.findByPk(userId);
       const group = await Group.findByPk(groupId);
 
-      if (!user || !group) {
+      if (!user && !group) {
         throw new Error(
           "Unable to match User and Group, verify userId and groupId exist"
         );
