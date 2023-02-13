@@ -1,6 +1,9 @@
 import express from "express";
-import { UserService } from "../services/user.services";
-import { validateNewUserData, validateUserData } from "../utils/validations";
+import { UserService } from "../services/user.service";
+import {
+  validateUpdatedUserData,
+  validateUserData,
+} from "../utils/validations";
 
 const userService = new UserService();
 
@@ -23,7 +26,6 @@ router.get("/suggestions/:loginSubstring", async (req, res) => {
 
     const limit = req.query.limit ? Number(req.query.limit) : undefined;
 
-    console.log(req.query.limit);
     const filteredUsers = await userService.getAutoSuggestUsers(
       loginSubstring,
       limit
@@ -52,7 +54,7 @@ router.post("/", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
   try {
-    const { error, value } = validateNewUserData(req.body);
+    const { error, value } = validateUpdatedUserData(req.body);
 
     if (error) {
       throw new Error(error.message);

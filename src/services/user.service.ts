@@ -1,4 +1,4 @@
-import { NewUserEntry } from "../types";
+import { UpdatedUserEntry } from "../types";
 import { User } from "../models/user.model";
 
 export class UserService {
@@ -23,8 +23,11 @@ export class UserService {
     return undefined;
   }
 
-  async updateUser(id: string, newUserEntry: NewUserEntry): Promise<User> {
-    const { login, password, age } = newUserEntry;
+  async updateUser(
+    id: string,
+    updatedUserEntry: UpdatedUserEntry
+  ): Promise<User> {
+    const { login, password, age } = updatedUserEntry;
     const user = await User.findByPk(id);
     if (user) {
       user.login = login;
@@ -49,7 +52,6 @@ export class UserService {
 
     const suggestedUsers = sortedUsers.slice(0, limit);
 
-    console.log(limit);
     return suggestedUsers;
   }
 }

@@ -1,6 +1,7 @@
 import express from "express";
 import { DB } from "./database/database";
-import usersRouter from "./routes/users";
+import usersRouter from "./routes/users.routes";
+import groupsRouter from "./routes/groups.routes";
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,7 @@ async function main() {
 main();
 
 app.use("/api/users", usersRouter);
+app.use("/api/groups", groupsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -1,5 +1,13 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  BelongsToMany,
+} from "sequelize-typescript";
 import { UUIDV4 } from "sequelize";
+import { Group } from "./group.model";
+import { UserGroup } from "./userGroup.model";
 
 interface UserAttributes {
   id: string;
@@ -46,4 +54,7 @@ export class User extends Model<UserAttributes> {
     allowNull: false,
   })
   isDeleted!: boolean;
+
+  @BelongsToMany(() => Group, () => UserGroup)
+  groups!: Group[];
 }

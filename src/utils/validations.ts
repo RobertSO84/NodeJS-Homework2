@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { NewUserEntry, UserEntry } from "../types";
+import { GroupEntry, UpdatedUserEntry, UserEntry } from "../types";
 
 export const validateUserData = (user: UserEntry) => {
   const userSchema = Joi.object({
@@ -19,7 +19,7 @@ export const validateUserData = (user: UserEntry) => {
   return userSchema.validate(user);
 };
 
-export const validateNewUserData = (user: NewUserEntry) => {
+export const validateUpdatedUserData = (user: UpdatedUserEntry) => {
   const userSchema = Joi.object({
     login: Joi.string().email().required(),
     password: Joi.string()
@@ -30,4 +30,18 @@ export const validateNewUserData = (user: NewUserEntry) => {
   });
 
   return userSchema.validate(user);
+};
+
+export const validateGroupData = (group: GroupEntry) => {
+  const groupSchema = Joi.object({
+    id: Joi.string(),
+    name: Joi.string().required(),
+    permissions: Joi.array()
+      .items(
+        Joi.string().valid("READ", "WRITE", "DELETE", "SHARE", "UPLOAD_FILES")
+      )
+      .required(),
+  });
+
+  return groupSchema.validate(group);
 };

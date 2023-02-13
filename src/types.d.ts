@@ -9,4 +9,14 @@ export interface UserEntry {
   isDeleted: boolean;
 }
 
-export type NewUserEntry = Omit<UserEntry, "id" | "isDeleted">;
+export type UpdatedUserEntry = Omit<UserEntry, "id" | "isDeleted">;
+
+export type Permission = "READ" | "WRITE" | "DELETE" | "SHARE" | "UPLOAD_FILES";
+
+export interface GroupEntry {
+  id: string;
+  name: string;
+  permissions: Array<Permission>;
+}
+
+export type UpdatedGroupEntry = Omit<GroupEntry, "id">;
