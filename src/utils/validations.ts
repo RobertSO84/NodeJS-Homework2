@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { GroupEntry, UpdatedUserEntry, UserEntry } from "../types";
+import { UserGroup } from "../models/userGroup.model";
 
 export const validateUserData = (user: UserEntry) => {
   const userSchema = Joi.object({
@@ -12,7 +13,6 @@ export const validateUserData = (user: UserEntry) => {
         new Error("Password must contain at least one letter and one number")
       ),
     age: Joi.number().min(4).max(130).required(),
-    gender: Joi.string().valid("male", "female", "other").required(),
     isDeleted: Joi.boolean(),
   });
 
@@ -26,7 +26,6 @@ export const validateUpdatedUserData = (user: UpdatedUserEntry) => {
       .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
       .required(),
     age: Joi.number().integer().min(4).max(130).required(),
-    gender: Joi.string().valid("male", "female", "other").required(),
   });
 
   return userSchema.validate(user);
@@ -44,4 +43,13 @@ export const validateGroupData = (group: GroupEntry) => {
   });
 
   return groupSchema.validate(group);
+};
+
+export const validateUserToGroupData = (userToGroup: UserGroup) => {
+  const userToGroupSchema = Joi.object({
+    userId: Joi.string().required(),
+    groupId: Joi.string().required(),
+  });
+
+  return userToGroupSchema.validate(userToGroup);
 };

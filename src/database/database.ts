@@ -14,7 +14,7 @@ export class DB {
     // Group.belongsToMany(User, { through: UserGroup, onDelete: "cascade" });
     try {
       await DB.sequelize.authenticate();
-      await DB.sequelize.sync({ force: true });
+      await DB.sequelize.sync({ force: false });
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       error.message = `DB connection error: ${error.message}`;

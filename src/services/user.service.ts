@@ -1,5 +1,9 @@
 import { UpdatedUserEntry } from "../types";
 import { User } from "../models/user.model";
+import { DB } from "../database/database";
+import { UserGroup } from "../models/userGroup.model";
+import { Transaction } from "sequelize";
+import { Group } from "../models/group.model";
 
 export class UserService {
   async findAll(): Promise<User[]> {
@@ -53,5 +57,34 @@ export class UserService {
     const suggestedUsers = sortedUsers.slice(0, limit);
 
     return suggestedUsers;
+  }
+
+  async addUserToGroup(
+    userId: string | undefined,
+    groupId: string | undefined
+  ): Promise<UserGroup | undefined> {
+    const t: Transaction = await DB.sequelize.transaction();
+    try {
+      const user = await User.findByPk(userId);
+      const group = await Group.findByPk(groupId);
+
+      if (!user || !group) {
+        throw new Error(
+          "Unable to match User and Group, verify userId and groupId exist"
+        );
+      }
+      const userToGroup = await UserGroup.create(
+        { userId, groupId },
+        { transaction: t }
+      );
+      await t.commit();
+      return userToGroup;
+    } catch (error: any) {
+      console.error(error.message);
+      if (t) {
+        await t.rollback();
+      }
+      throw new Error("Unable to match user and group");
+    }
   }
 }

@@ -3,6 +3,7 @@ import { UserService } from "../services/user.service";
 import {
   validateUpdatedUserData,
   validateUserData,
+  validateUserToGroupData,
 } from "../utils/validations";
 
 const userService = new UserService();
@@ -52,6 +53,22 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/addUserToGroup/", async (req, res) => {
+  try {
+    const { error, value } = validateUserToGroupData(req.body);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    const { userId, groupId } = value;
+    const newUserGroup = await userService.addUserToGroup(userId, groupId);
+    res.json(newUserGroup);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    res.status(400).send(error.message);
+  }
+});
+
 router.patch("/:id", async (req, res) => {
   try {
     const { error, value } = validateUpdatedUserData(req.body);
@@ -59,12 +76,11 @@ router.patch("/:id", async (req, res) => {
     if (error) {
       throw new Error(error.message);
     }
-    const { login, password, age, gender } = value;
+    const { login, password, age } = value;
     const updatedUser = await userService.updateUser(String(req.params.id), {
       login,
       password,
       age,
-      gender,
     });
     res.json(updatedUser);
   } catch (error: any) {
