@@ -5,20 +5,32 @@ import {
   validateUserData,
   validateUserToGroupData,
 } from "../utils/validations";
+// import { logger } from "../utils/logger";
 
 const userService = new UserService();
 
 const router = express.Router();
 
 router.get("/", async (_req, res) => {
-  const users = await userService.findAll();
-  res.send(users);
+  try {
+    const users = await userService.findAll();
+    res.send(users);
+  } catch (error: any) {
+    console.log(error.message);
+  }
 });
 
 router.get("/:id", async (req, res) => {
-  const user = await userService.findById(req.params.id);
-
-  return user ? res.send(user) : res.sendStatus(404);
+  try {
+    const user = await userService.findById(req.params.id);
+    if (!user) {
+      throw new Error();
+    }
+    res.send(user);
+  } catch (error: any) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.get("/suggestions/:loginSubstring", async (req, res) => {
@@ -89,9 +101,15 @@ router.patch("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const userDeleted = await userService.deleteUser(req.params.id);
-  console.log(userDeleted);
-  return userDeleted ? res.json(userDeleted) : res.sendStatus(404);
+  try {
+    const userDeleted = await userService.deleteUser(req.params.id);
+    if (!userDeleted) {
+      throw new Error();
+    }
+    res.json(userDeleted);
+  } catch (error: any) {
+    console.log(error.message);
+  }
 });
 
 export default router;
