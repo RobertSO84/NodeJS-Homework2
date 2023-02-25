@@ -2,9 +2,11 @@ import express from "express";
 import { DB } from "./database/database";
 import usersRouter from "./routes/users.routes";
 import groupsRouter from "./routes/groups.routes";
+import { loggingMiddleware } from "./middleware/logginMiddleware";
 
 const app = express();
 app.use(express.json());
+app.use(loggingMiddleware);
 
 const PORT = 3000;
 
