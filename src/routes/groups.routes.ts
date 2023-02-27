@@ -1,20 +1,32 @@
 import express from "express";
 import { GroupService } from "../services/group.service";
 import { validateGroupData } from "../utils/validations";
+import { logger } from "../utils/logger";
 
 const groupService = new GroupService();
 
 const router = express.Router();
 
 router.get("/", async (_req, res) => {
-  const groups = await groupService.findAll();
-  res.send(groups);
+  try {
+    const groups = await groupService.findAll();
+    res.send(groups);
+  } catch (error: any) {
+    logger.error(error.message);
+  }
 });
 
 router.get("/:id", async (req, res) => {
-  const group = await groupService.findById(req.params.id);
-
-  return res.send(group) || res.sendStatus(404);
+  try {
+    const group = await groupService.findById(req.params.id);
+    if (!group) {
+      throw new Error("Group not found");
+    }
+    res.send(group);
+  } catch (error: any) {
+    logger.error(error.message);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.post("/", async (req, res) => {
@@ -27,6 +39,7 @@ router.post("/", async (req, res) => {
     const newGroup = await groupService.createGroup(value);
     res.json(newGroup);
   } catch (error: any) {
+    logger.error(error.messsage);
     res.status(400).send(error.message);
   }
 });
@@ -44,13 +57,22 @@ router.patch("/:id", async (req, res) => {
     });
     res.json(updatedGroup);
   } catch (error: any) {
+    logger.error(error.messsage);
     res.status(400).send(error.message);
   }
 });
 
 router.delete("/:id", async (req, res) => {
-  const groupDeleted = await groupService.deleteGroup(req.params.id);
-  return groupDeleted ? res.json(groupDeleted) : res.sendStatus(404);
+  try {
+    const groupDeleted = await groupService.deleteGroup(req.params.id);
+    if (!groupDeleted) {
+      throw new Error();
+    }
+    res.json(groupDeleted);
+  } catch (error: any) {
+    logger.error(error.messsage);
+    res.sendStatus(404);
+  }
 });
 
 export default router;

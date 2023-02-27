@@ -5,7 +5,7 @@ import {
   validateUserData,
   validateUserToGroupData,
 } from "../utils/validations";
-// import { logger } from "../utils/logger";
+import { logger } from "../utils/logger";
 
 const userService = new UserService();
 
@@ -16,7 +16,7 @@ router.get("/", async (_req, res) => {
     const users = await userService.findAll();
     res.send(users);
   } catch (error: any) {
-    console.log(error.message);
+    logger.error(error.message);
   }
 });
 
@@ -24,11 +24,11 @@ router.get("/:id", async (req, res) => {
   try {
     const user = await userService.findById(req.params.id);
     if (!user) {
-      throw new Error();
+      throw new Error("User not found");
     }
     res.send(user);
   } catch (error: any) {
-    console.log(error.message);
+    logger.error(error.message);
     res.status(400).json({ message: error.message });
   }
 });
@@ -46,6 +46,7 @@ router.get("/suggestions/:loginSubstring", async (req, res) => {
 
     res.json(filteredUsers);
   } catch (error: any) {
+    logger.error(error.messsage);
     res.status(400).json({ message: error.message });
   }
 });
@@ -61,6 +62,7 @@ router.post("/", async (req, res) => {
     res.json(newUser);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    logger.error(error.messsage);
     res.status(400).send(error.message);
   }
 });
@@ -77,6 +79,7 @@ router.post("/addUserToGroup/", async (req, res) => {
     res.json(newUserGroup);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    logger.error(error.messsage);
     res.status(400).send(error.message);
   }
 });
@@ -96,6 +99,7 @@ router.patch("/:id", async (req, res) => {
     });
     res.json(updatedUser);
   } catch (error: any) {
+    logger.error(error.messsage);
     res.status(400).send(error.message);
   }
 });
@@ -108,7 +112,8 @@ router.delete("/:id", async (req, res) => {
     }
     res.json(userDeleted);
   } catch (error: any) {
-    console.log(error.message);
+    logger.error(error.messsage);
+    res.sendStatus(404);
   }
 });
 
