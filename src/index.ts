@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { DB } from "./database/database";
 import usersRouter from "./routes/users.routes";
 import groupsRouter from "./routes/groups.routes";
@@ -11,6 +12,7 @@ import { logger } from "./utils/logger";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(loggingMiddleware);
 app.use(errorHandler);
 app.use(logErrorsMiddleware);
