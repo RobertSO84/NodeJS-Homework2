@@ -2,12 +2,13 @@ import express from "express";
 import { GroupService } from "../services/group.service";
 import { validateGroupData } from "../utils/validations";
 import { logger } from "../utils/logger";
+import { checkToken } from "../middleware/authMiddleware";
 
 const groupService = new GroupService();
 
 const router = express.Router();
 
-router.get("/", async (_req, res) => {
+router.get("/", checkToken, async (_req, res) => {
   try {
     const groups = await groupService.findAll();
     res.send(groups);
@@ -16,7 +17,7 @@ router.get("/", async (_req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkToken, async (req, res) => {
   try {
     const group = await groupService.findById(req.params.id);
     if (!group) {
@@ -29,7 +30,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", checkToken, async (req, res) => {
   try {
     const { error, value } = validateGroupData(req.body);
 
@@ -44,7 +45,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", checkToken, async (req, res) => {
   try {
     const { error, value } = validateGroupData(req.body);
     if (error) {
@@ -62,7 +63,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkToken, async (req, res) => {
   try {
     const groupDeleted = await groupService.deleteGroup(req.params.id);
     if (!groupDeleted) {

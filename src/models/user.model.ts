@@ -4,7 +4,9 @@ import {
   Model,
   DataType,
   BelongsToMany,
+  // BeforeCreate,
 } from "sequelize-typescript";
+// import bcrypt from "bcrypt";
 import { UUIDV4 } from "sequelize";
 import { Group } from "./group.model";
 import { UserGroup } from "./userGroup.model";
@@ -54,6 +56,13 @@ export class User extends Model<UserAttributes> {
     allowNull: false,
   })
   isDeleted!: boolean;
+
+  // @BeforeCreate
+  // static async hashPassword(instance: User, next: any) {
+  //   const hash = await bcrypt.hash(instance.password, 10)
+  //   instance.password = hash
+  //   next();
+  // }
 
   @BelongsToMany(() => Group, () => UserGroup)
   groups!: Group[];

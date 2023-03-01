@@ -1,9 +1,11 @@
+import { Transaction } from "sequelize";
+import jwt from "jsonwebtoken";
 import { UpdatedUserEntry } from "../types";
 import { User } from "../models/user.model";
 import { DB } from "../database/database";
 import { UserGroup } from "../models/userGroup.model";
-import { Transaction } from "sequelize";
 import { Group } from "../models/group.model";
+import authConfig from "../config/auth";
 
 export class UserService {
   async findAll(): Promise<User[]> {
@@ -86,5 +88,15 @@ export class UserService {
       }
       throw new Error("Unable to match user and group");
     }
+  }
+
+  async login(login: string, password: string): Promise<string | null> {
+    const user = await User.findOne({ where: { login: login } });
+    if (!user || user.password !== password) {
+      throw new Error("User not found");
+    }
+    const payload = { sub: user.id, login: user.login };
+    const token = jwt.sign(payload, authConfig.secret, { expiresIn: 600 });
+    return token;
   }
 }

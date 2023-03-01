@@ -53,3 +53,17 @@ export const validateUserToGroupData = (userToGroup: UserGroup) => {
 
   return userToGroupSchema.validate(userToGroup);
 };
+
+export const validateUserLoginData = (user: UserEntry) => {
+  const userLoginSchema = Joi.object({
+    login: Joi.string().email().required(),
+    password: Joi.string()
+      .regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/)
+      .required()
+      .error(
+        new Error("Password must contain at least one letter and one number")
+      ),
+  });
+
+  return userLoginSchema.validate(user);
+};

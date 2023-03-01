@@ -3,15 +3,17 @@ import { UserService } from "../services/user.service";
 import {
   validateUpdatedUserData,
   validateUserData,
+  validateUserLoginData,
   validateUserToGroupData,
 } from "../utils/validations";
 import { logger } from "../utils/logger";
+import { checkToken } from "../middleware/authMiddleware";
 
 const userService = new UserService();
 
 const router = express.Router();
 
-router.get("/", async (_req, res) => {
+router.get("/", checkToken, async (_req, res) => {
   try {
     const users = await userService.findAll();
     res.send(users);
@@ -20,7 +22,7 @@ router.get("/", async (_req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkToken, async (req, res) => {
   try {
     const user = await userService.findById(req.params.id);
     if (!user) {
@@ -33,7 +35,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/suggestions/:loginSubstring", async (req, res) => {
+router.get("/suggestions/:loginSubstring", checkToken, async (req, res) => {
   try {
     const loginSubstring = req.params.loginSubstring;
 
@@ -84,7 +86,7 @@ router.post("/addUserToGroup/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", checkToken, async (req, res) => {
   try {
     const { error, value } = validateUpdatedUserData(req.body);
 
@@ -104,7 +106,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", checkToken, async (req, res) => {
   try {
     const userDeleted = await userService.deleteUser(req.params.id);
     if (!userDeleted) {
@@ -114,6 +116,23 @@ router.delete("/:id", async (req, res) => {
   } catch (error: any) {
     logger.error(error.messsage);
     res.sendStatus(404);
+  }
+});
+
+router.post("/login/", async (req, res) => {
+  try {
+    const { error, value } = validateUserLoginData(req.body);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    const { login, password } = value;
+    const token = await userService.login(login, password);
+    res.json(token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    logger.error(error.messsage);
+    res.status(400).send(error.message);
   }
 });
 
