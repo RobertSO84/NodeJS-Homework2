@@ -9,7 +9,7 @@ import {
 } from "./middleware/logginMiddleware";
 import { logger } from "./utils/logger";
 
-const app = express();
+export const app = express();
 app.use(express.json());
 app.use(loggingMiddleware);
 app.use(errorHandler);
