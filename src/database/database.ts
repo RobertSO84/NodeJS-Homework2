@@ -2,13 +2,12 @@ import { Sequelize } from "sequelize-typescript";
 import { User } from "../models/user.model";
 import { Group } from "../models/group.model";
 import { UserGroup } from "../models/userGroup.model";
+import { DB_CONNECTION_STRING } from "../../config";
 
 export class DB {
   public static sequelize: Sequelize;
   public static async initDB() {
-    DB.sequelize = new Sequelize(
-      "postgres://hxlolgti:vzLLUrq313M3wNIeDrlyX0mt5bc_HqHq@chunee.db.elephantsql.com/hxlolgti"
-    );
+    DB.sequelize = new Sequelize(DB_CONNECTION_STRING);
     DB.sequelize.addModels([User, Group, UserGroup]);
 
     try {
