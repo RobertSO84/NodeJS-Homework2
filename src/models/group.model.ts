@@ -26,6 +26,7 @@ interface GroupAttributes {
 
 @Table({
   tableName: "groups",
+  timestamps: false,
 })
 export class Group extends Model<GroupAttributes> {
   @Column({

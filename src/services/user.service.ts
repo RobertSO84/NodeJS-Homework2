@@ -5,7 +5,7 @@ import { User } from "../models/user.model";
 import { DB } from "../database/database";
 import { UserGroup } from "../models/userGroup.model";
 import { Group } from "../models/group.model";
-import authConfig from "../config/auth";
+import { JWT_SECRET } from "../../config";
 
 export class UserService {
   async findAll(): Promise<User[]> {
@@ -96,7 +96,9 @@ export class UserService {
       throw new Error("User not found");
     }
     const payload = { sub: user.id, login: user.login };
-    const token = jwt.sign(payload, authConfig.secret, { expiresIn: 600 });
+    const token = jwt.sign(payload, JWT_SECRET, {
+      expiresIn: 600,
+    });
     return token;
   }
 }

@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import authConfig from "../config/auth";
+import { JWT_HTTP_HEADER_KEY, JWT_SECRET } from "../../config";
 
 export function checkToken(
   req: { headers: { [x: string]: any } },
   res: any,
   next: () => void
 ) {
-  const token = req.headers["x-access-token"];
+  const token = req.headers[JWT_HTTP_HEADER_KEY];
   if (!token) {
     return res
       .status(401)
@@ -15,7 +15,7 @@ export function checkToken(
 
   return jwt.verify(
     token,
-    authConfig.secret,
+    JWT_SECRET,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     function (error: any, _decoded: any) {
       if (error) {

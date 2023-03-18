@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import cors from "cors";
 import { DB } from "./database/database";
@@ -10,14 +12,16 @@ import {
 } from "./middleware/logginMiddleware";
 import { logger } from "./utils/logger";
 
-const app = express();
+import { SERVER_PORT } from "../config";
+
+export const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(loggingMiddleware);
 app.use(errorHandler);
 app.use(logErrorsMiddleware);
 
-const PORT = 3000;
+const PORT = SERVER_PORT;
 
 process.on("uncaughtException", (error: Error) => {
   logger.error(error.message, error);
