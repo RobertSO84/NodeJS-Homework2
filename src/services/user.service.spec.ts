@@ -14,7 +14,6 @@ describe("User Service", () => {
 
   describe("findAll()", () => {
     it("returns users", async () => {
-      let findAllSpy = jest.spyOn(service, "findAll");
       const user1 = {
         id: "f03886b3-ea4f-4e9b-97f9-93077034b96e",
         login: "Rob45@hotmail.com",
@@ -30,6 +29,8 @@ describe("User Service", () => {
         isDeleted: false,
       };
       const users = [new User(user1), new User(user2)];
+
+      const findAllSpy = jest.spyOn(service, "findAll");
 
       findAllSpy.mockResolvedValue(users);
 

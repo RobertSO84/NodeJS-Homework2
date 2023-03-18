@@ -15,7 +15,7 @@ describe("Group Service", () => {
 
   describe("findAll()", () => {
     it("returns groups", async () => {
-      let findAllSpy = jest.spyOn(service, "findAll");
+      const findAllGroupSpy = jest.spyOn(service, "findAll");
       const group1 = {
         id: "f400c15d-d6c3-4530-a813-149a49ffebc3",
         name: "Javascript Group",
@@ -24,11 +24,11 @@ describe("Group Service", () => {
 
       const groups = [new Group(group1)];
 
-      findAllSpy.mockResolvedValue(groups);
+      findAllGroupSpy.mockResolvedValue(groups);
 
       await service.findAll();
 
-      expect(findAllSpy).toHaveBeenCalled();
+      expect(findAllGroupSpy).toHaveBeenCalled();
     });
   });
 

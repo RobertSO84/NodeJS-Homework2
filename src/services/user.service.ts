@@ -8,22 +8,22 @@ import { Group } from "../models/group.model";
 import { JWT_SECRET } from "../../config";
 
 export class UserService {
-  async findAll(): Promise<User[]> {
-    return await User.findAll();
+  findAll(): Promise<User[]> {
+    return User.findAll();
   }
 
-  async findById(id: string): Promise<User | null> {
-    return await User.findByPk(id);
+  findById(id: string): Promise<User | null> {
+    return User.findByPk(id);
   }
 
-  async createUser(user: User): Promise<User> {
-    return await User.create(user);
+  createUser(user: User): Promise<User> {
+    return User.create(user);
   }
 
   async deleteUser(id: string): Promise<string | undefined> {
     const user = await this.findById(id);
     if (user) {
-      await user.destroy();
+      user.destroy();
       return "User deleted";
     }
     return undefined;
@@ -39,7 +39,7 @@ export class UserService {
       user.login = login;
       user.password = password;
       user.age = age;
-      await user.save();
+      user.save();
       return user;
     }
     throw new Error("Id not found");
