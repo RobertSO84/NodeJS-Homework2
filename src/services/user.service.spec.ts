@@ -1,7 +1,7 @@
 import { User } from "../models/user.model";
-import { UserService } from "../services/user.service";
+import { UserService } from "./user.service";
 
-jest.mock("../services/user.service");
+jest.mock("./user.service");
 jest.mock("../models/user.model");
 
 describe("User Service", () => {
@@ -29,9 +29,9 @@ describe("User Service", () => {
         age: 22,
         isDeleted: false,
       };
-      const retusers = [new User(user1), new User(user2)];
+      const users = [new User(user1), new User(user2)];
 
-      findAllSpy.mockResolvedValue(retusers);
+      findAllSpy.mockResolvedValue(users);
 
       await service.findAll();
 
