@@ -191,5 +191,14 @@ Returns a list of all groups. Needs authorization token.
 Returns one group with the corresponding id given in the URL. Needs authorization token.
 Example: GET http://localhost:3000/api/users/9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512
 
+#### POST /api/groups/
+Creates a group. Needs authorization token.
+
+#### PATCH /api/groups/{id}
+Updates a group that matches the id given in the URL.
+
+#### DELETE /api/groups/{id}
+Deletes a group that matches the id given in the URL.
+Example: DELETE http://localhost:3000/api/groups/d03946af-7ea9-41c5-bd99-6041252604fd
 
 
