@@ -98,11 +98,13 @@ Response example:
 
 ## APIs and Interfaces
 
+### Users
+
 #### GET /api/users/
 Returns a list of all users. Needs authorization token.
 
 #### GET /api/users/{id}
-Returns one use with the corresponding id. Needs authorization token.
+Returns one user with the corresponding id given in the URL. Needs authorization token.
 Example: GET http://localhost:3000/api/users/9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512
 
 #### GET /suggestions/{loginSubstring} 
@@ -129,7 +131,7 @@ Example response:
     ]
     
 #### PATCH /api/users/{id}
-Update an User that matches the id. Needs authorization token.
+Update an User that matches the id given in the URL. Needs authorization token.
 Example: PATCH http://localhost:3000/api/users/9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512
 
 Body example: 
@@ -154,7 +156,40 @@ Response example:
 Creates an User entity. 
 
 #### POST /api/users/login
-Creates a login jwt token to be used in the header as `x-access-token`. 
+Creates a login jwt token to be used in the header as `x-access-token`.
+
+#### POST /api/users/addUserToGroup
+Adds certain User to a Group.
+Example: http://localhost:3000/api/users/addUserToGroup/
+
+Body example: 
+
+    {
+        "userId": "9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512",
+        "groupId": "4eb6c770-7304-4e6b-b201-604b1b965061"
+    }
+    
+Response example: 
+
+    {
+        "userId": "9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512",
+        "groupId": "4eb6c770-7304-4e6b-b201-604b1b965061",
+        "updatedAt": "2023-03-22T17:47:35.367Z",
+        "createdAt": "2023-03-22T17:47:35.367Z"
+    }
+    
+
+#### DELETE /api/users/{id}
+Deletes a user that matches the id given in the URL.
+
+### Group 
+
+#### GET /api/groups/
+Returns a list of all groups. Needs authorization token.
+
+#### GET /api/groups/{id}
+Returns one group with the corresponding id given in the URL. Needs authorization token.
+Example: GET http://localhost:3000/api/users/9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512
 
 
 
