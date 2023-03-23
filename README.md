@@ -162,6 +162,7 @@ Creates a login jwt token to be used in the header as `x-access-token`.
 
 #### POST /api/users/addUserToGroup
 Adds certain User to a Group.
+
 Example: http://localhost:3000/api/users/addUserToGroup/
 
 Body example: 
