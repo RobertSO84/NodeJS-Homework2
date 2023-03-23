@@ -133,6 +133,7 @@ Example response:
     
 #### PATCH /api/users/{id}
 Update an User that matches the id given in the URL. Needs authorization token.
+
 Example: PATCH http://localhost:3000/api/users/9198bbd8-a2fd-4ffb-a4ff-4fb02e2e8512
 
 Body example: 
