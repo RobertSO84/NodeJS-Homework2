@@ -41,6 +41,7 @@ Response example:
 POST http://localhost:3000/api/users/login/
 
 Body example: 
+
     {
         "login": "Rob45@hotmail.com",
         "password": "3e4e"
