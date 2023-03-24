@@ -5,11 +5,7 @@ import cors from "cors";
 import { DB } from "./database/database";
 import usersRouter from "./routes/users.routes";
 import groupsRouter from "./routes/groups.routes";
-import {
-  errorHandler,
-  logErrorsMiddleware,
-  loggingMiddleware,
-} from "./middleware/logginMiddleware";
+import { loggingMiddleware } from "./middleware/logginMiddleware";
 import { logger } from "./utils/logger";
 
 import { SERVER_PORT } from "../config";
@@ -18,8 +14,6 @@ export const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(loggingMiddleware);
-app.use(errorHandler);
-app.use(logErrorsMiddleware);
 
 const PORT = SERVER_PORT;
 

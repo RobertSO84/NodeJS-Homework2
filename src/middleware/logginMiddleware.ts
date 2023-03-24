@@ -9,8 +9,6 @@ export function loggingMiddleware(
   _res: any,
   next: () => void
 ) {
-  //   const method = req.url.split("/")[2];
-  //   const args = req.body;
   console.log(
     `Service method ${req.method} ${
       req.url
@@ -25,22 +23,14 @@ export function errorHandler(error: Error, _req: any, res: any, next: any) {
   next(error);
 }
 
-export function logErrorsMiddleware(
+export function logErrors(
+  error: Error,
   req: {
     method: any;
     url: string;
     body: any;
   },
-  res: any,
-  next: () => void
+  _res: any
 ) {
-  try {
-    next();
-  } catch (error: any) {
-    logger.error(
-      `${req.method} ${JSON.stringify(req.body)} ${error.message}`,
-      error
-    );
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+  logger.error(`${req.method} ${JSON.stringify(req.body)} ${error.message}`);
 }

@@ -1,8 +1,8 @@
 import express from "express";
 import { GroupService } from "../services/group.service";
 import { validateGroupData } from "../utils/validations";
-import { logger } from "../utils/logger";
 import { checkToken } from "../middleware/authMiddleware";
+import { logErrors } from "../middleware/logginMiddleware";
 
 const groupService = new GroupService();
 
@@ -13,7 +13,7 @@ router.get("/", checkToken, async (_req, res) => {
     const groups = await groupService.findAll();
     res.send(groups);
   } catch (error: any) {
-    logger.error(error.message);
+    logErrors(error, _req, res);
   }
 });
 
@@ -25,7 +25,7 @@ router.get("/:id", checkToken, async (req, res) => {
     }
     res.send(group);
   } catch (error: any) {
-    logger.error(error.message);
+    logErrors(error, req, res);
     res.status(400).json({ message: error.message });
   }
 });
@@ -40,7 +40,7 @@ router.post("/", checkToken, async (req, res) => {
     const newGroup = await groupService.createGroup(value);
     res.json(newGroup);
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.status(400).send(error.message);
   }
 });
@@ -58,7 +58,7 @@ router.patch("/:id", checkToken, async (req, res) => {
     });
     res.json(updatedGroup);
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.status(400).send(error.message);
   }
 });
@@ -71,7 +71,7 @@ router.delete("/:id", checkToken, async (req, res) => {
     }
     res.json(groupDeleted);
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.sendStatus(404);
   }
 });

@@ -93,7 +93,7 @@ export class UserService {
   async login(login: string, password: string): Promise<string | null> {
     const user = await User.findOne({ where: { login: login } });
     if (!user || user.password !== password) {
-      throw new Error("User not found");
+      throw new Error("User not found for login");
     }
     const payload = { sub: user.id, login: user.login };
     const token = jwt.sign(payload, JWT_SECRET, {

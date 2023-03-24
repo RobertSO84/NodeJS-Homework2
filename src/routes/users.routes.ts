@@ -6,8 +6,8 @@ import {
   validateUserLoginData,
   validateUserToGroupData,
 } from "../utils/validations";
-import { logger } from "../utils/logger";
 import { checkToken } from "../middleware/authMiddleware";
+import { logErrors } from "../middleware/logginMiddleware";
 
 const userService = new UserService();
 
@@ -18,7 +18,7 @@ router.get("/", checkToken, async (_req, res) => {
     const users = await userService.findAll();
     res.send(users);
   } catch (error: any) {
-    logger.error(error.message);
+    logErrors(error, _req, res);
   }
 });
 
@@ -30,7 +30,7 @@ router.get("/:id", checkToken, async (req, res) => {
     }
     res.send(user);
   } catch (error: any) {
-    logger.error(error.message);
+    logErrors(error, req, res);
     res.status(400).json({ message: error.message });
   }
 });
@@ -48,7 +48,7 @@ router.get("/suggestions/:loginSubstring", checkToken, async (req, res) => {
 
     res.json(filteredUsers);
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.status(400).json({ message: error.message });
   }
 });
@@ -64,7 +64,7 @@ router.post("/", async (req, res) => {
     res.json(newUser);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.status(400).send(error.message);
   }
 });
@@ -81,7 +81,7 @@ router.post("/addUserToGroup/", async (req, res) => {
     res.json(newUserGroup);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.status(400).send(error.message);
   }
 });
@@ -101,7 +101,7 @@ router.patch("/:id", checkToken, async (req, res) => {
     });
     res.json(updatedUser);
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.status(400).send(error.message);
   }
 });
@@ -114,25 +114,25 @@ router.delete("/:id", checkToken, async (req, res) => {
     }
     res.json(userDeleted);
   } catch (error: any) {
-    logger.error(error.messsage);
+    logErrors(error, req, res);
     res.sendStatus(404);
   }
 });
 
-router.post("/login/", async (req, res) => {
+router.post("/login/", async (req: any, res: any) => {
   try {
     const { error, value } = validateUserLoginData(req.body);
 
     if (error) {
-      throw new Error(error.message);
+      throw new Error("Not found in router");
     }
     const { login, password } = value;
     const token = await userService.login(login, password);
     res.json(token);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    logger.error(error.messsage);
-    res.status(400).send(error.message);
+    logErrors(error, req, res);
+    res.status(404).send(error.message);
   }
 });
 
